@@ -1,0 +1,99 @@
+import pandas as pd
+import numpy as np
+from sklearn.naive_bayes import GaussianNB
+from flask import Flask, request, jsonify
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import TfidfVectorizer
+import joblib
+from flask_cors import CORS
+
+# Loading model
+file = open('./model/nb_model.pkl', 'rb')
+model = joblib.load(file)
+
+# Loading dataset
+gizi = pd.read_csv('./dataset/gizi.csv')
+
+# Membuat Representasi vektor untuk sistem rekomendasi
+tfidf_nama = TfidfVectorizer().fit_transform(gizi['Nama Pangan'])
+tfidf_energi = gizi['Energi'].to_numpy().reshape(-1, 1)
+tfidf_protein = gizi['Protein'].to_numpy().reshape(-1, 1)
+tfidf_lemak = gizi['Lemak'].to_numpy().reshape(-1, 1)
+tfidf_karbohidrat = gizi['Karbohidrat'].to_numpy().reshape(-1, 1)
+tfidf_kalsium = gizi['Kalsium'].to_numpy().reshape(-1, 1)
+tfidf_besi = gizi['Besi'].to_numpy().reshape(-1, 1)
+tfidf_air = gizi['Air'].to_numpy().reshape(-1, 1)
+
+# Menggabungkan semua vektor
+item_vectors = pd.DataFrame(cosine_similarity(tfidf_nama, tfidf_nama), columns=gizi["Nama Pangan"]).mul(0.1)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_energi, tfidf_energi), columns=gizi["Nama Pangan"]).mul(0.1285714)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_protein, tfidf_protein), columns=gizi["Nama Pangan"]).mul(0.1285714)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_lemak, tfidf_lemak), columns=gizi["Nama Pangan"]).mul(0.1285714)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_karbohidrat, tfidf_karbohidrat), columns=gizi["Nama Pangan"]).mul(0.1285714)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_kalsium, tfidf_kalsium), columns=gizi["Nama Pangan"]).mul(0.1285714)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_besi, tfidf_besi), columns=gizi["Nama Pangan"]).mul(0.1285714)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_air, tfidf_air), columns=gizi["Nama Pangan"]).mul(0.1285714)
+
+app = Flask(__name__)
+CORS(app)
+
+@app.route('/')
+def message():
+    return "Model deployed!"
+
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    energi = request.json['energi']
+    protein = request.json['protein']
+    lemak = request.json['lemak']
+    karbohidrat = request.json['karbohidrat']
+    kalsium = request.json['kalsium']
+    besi = request.json['besi']
+    air = request.json['air']
+    float_features = [energi, protein, lemak, karbohidrat, kalsium, besi, air]
+    features = [np.array(float_features)]
+    prediction = model.predict(features)
+
+    data = gizi[gizi['Nama Pangan'] == prediction.item()]
+    nama = data['Nama Pangan'].values[0]
+    energi = data['Energi'].values[0]
+    protein = data['Protein'].values[0]
+    lemak = data['Lemak'].values[0]
+    karbohidrat = data['Karbohidrat'].values[0]
+    kalsium = data['Kalsium'].values[0]
+    besi = data['Besi'].values[0]
+    air = data['Air'].values[0]
+    takaran = data['Takaran'].values[0]
+    kriteria = data['Kriteria'].values[0]
+    berat = data['Berat (g)'].values[0]
+
+    #get recom
+    recom = recommend(name)
+
+    return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'kalsium':str(kalsium), 'besi':str(besi), 'air':str(air), 'takaran':str(takaran), 'kriteria':str(kriteria), 'berat':str(berat), 
+        'recom_nama1':recom['Nama Pangan'].values[0], 'recom_nama2':recom['Nama Pangan'].values[1], 'recom_nama3':recom['Nama Pangan'].values[2], 'recom_nama4':recom['Nama Pangan'].values[3], 'recom_nama5':recom['Nama Pangan'].values[4],
+        'recom_energi1':str(recom['Energi'].values[0]), 'recom_energi2':str(recom['Energi'].values[1]), 'recom_energi3':str(recom['Energi'].values[2]), 'recom_energi4':str(recom['Energi'].values[3]), 'recom_energi5':str(recom['Energi'].values[4]),
+        'recom_protein1':str(recom['Protein'].values[0]), 'recom_protein2':str(recom['Protein'].values[1]), 'recom_protein3':str(recom['Protein'].values[2]), 'recom_protein4':str(recom['Protein'].values[3]), 'recom_protein5':str(recom['Protein'].values[4]),
+        'recom_lemak1':str(recom['Lemak'].values[0]), 'recom_lemak2':str(recom['Lemak'].values[1]), 'recom_lemak3':str(recom['Lemak'].values[2]), 'recom_lemak4':str(recom['Lemak'].values[3]), 'recom_lemak5':str(recom['Lemak'].values[4]),
+        'recom_karbohidrat1':str(recom['Karbohidrat'].values[0]), 'recom_karbohidrat2':str(recom['Karbohidrat'].values[1]), 'recom_karbohidrat3':str(recom['Karbohidrat'].values[2]), 'recom_karbohidrat4':str(recom['Karbohidrat'].values[3]), 'recom_karbohidrat5':str(recom['Karbohidrat'].values[4]),
+        'recom_kalsium1':str(recom['Kalsium'].values[0]), 'recom_kalsium2':str(recom['Kalsium'].values[1]), 'recom_kalsium3':str(recom['Kalsium'].values[2]), 'recom_kalsium4':str(recom['Kalsium'].values[3]), 'recom_kalsium5':str(recom['Kalsium'].values[4]),
+        'recom_besi1':str(recom['Besi'].values[0]), 'recom_besi2':str(recom['Besi'].values[1]), 'recom_besi3':str(recom['Besi'].values[2]), 'recom_besi4':str(recom['Besi'].values[3]), 'recom_besi5':str(recom['Besi'].values[4]),
+        'recom_air1':str(recom['Air'].values[0]), 'recom_air2':str(recom['Air'].values[1]), 'recom_air3':str(recom['Air'].values[2]), 'recom_air4':str(recom['Air'].values[3]), 'recom_air5':str(recom['Air'].values[4]),
+        'recom_takaran1':str(recom['Takaran'].values[0]), 'recom_takaran2':str(recom['Takaran'].values[1]), 'recom_takaran3':str(recom['Takaran'].values[2]), 'recom_takaran4':str(recom['Takaran'].values[3]), 'recom_takaran5':str(recom['Takaran'].values[4]),
+        'recom_kriteria1':str(recom['Kriteria'].values[0]), 'recom_kriteria2':str(recom['Kriteria'].values[1]), 'recom_kriteria3':str(recom['Kriteria'].values[2]), 'recom_kriteria4':str(recom['Kriteria'].values[3]), 'recom_kriteria5':str(recom['Kriteria'].values[4]),
+        'recom_berat1':str(recom['Berat (g)'].values[0]), 'recom_berat2':str(recom['Berat (g)'].values[1]), 'recom_berat3':str(recom['Berat (g)'].values[2]), 'recom_berat4':str(recom['Berat (g)'].values[3]), 'recom_berat5':str(recom['Berat (g)'].values[4])})
+
+def recommend(nama, n=5, columns=None):
+    idx = gizi[gizi["Nama Pangan"] == nama].index[0]
+    sim_scores = list(enumerate(item_vectors.iloc[idx]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    sim_scores = sim_scores[1:n+1]
+    food_indices = [i[0] for i in sim_scores]
+    if columns is None:
+        return gizi.iloc[food_indices].reset_index(drop=True)
+    else:
+        return gizi[columns].iloc[food_indices].reset_index(drop=True)
+
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=5000)
