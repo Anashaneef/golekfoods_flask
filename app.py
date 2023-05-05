@@ -68,21 +68,8 @@ def predict():
     kriteria = data['Kriteria'].values[0]
     berat = data['Berat (g)'].values[0]
 
-    #get recom
-    recom = recommend(name)
-
-    return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'kalsium':str(kalsium), 'besi':str(besi), 'air':str(air), 'takaran':str(takaran), 'kriteria':str(kriteria), 'berat':str(berat), 
-        'recom_nama1':recom['Nama Pangan'].values[0], 'recom_nama2':recom['Nama Pangan'].values[1], 'recom_nama3':recom['Nama Pangan'].values[2], 'recom_nama4':recom['Nama Pangan'].values[3], 'recom_nama5':recom['Nama Pangan'].values[4],
-        'recom_energi1':str(recom['Energi'].values[0]), 'recom_energi2':str(recom['Energi'].values[1]), 'recom_energi3':str(recom['Energi'].values[2]), 'recom_energi4':str(recom['Energi'].values[3]), 'recom_energi5':str(recom['Energi'].values[4]),
-        'recom_protein1':str(recom['Protein'].values[0]), 'recom_protein2':str(recom['Protein'].values[1]), 'recom_protein3':str(recom['Protein'].values[2]), 'recom_protein4':str(recom['Protein'].values[3]), 'recom_protein5':str(recom['Protein'].values[4]),
-        'recom_lemak1':str(recom['Lemak'].values[0]), 'recom_lemak2':str(recom['Lemak'].values[1]), 'recom_lemak3':str(recom['Lemak'].values[2]), 'recom_lemak4':str(recom['Lemak'].values[3]), 'recom_lemak5':str(recom['Lemak'].values[4]),
-        'recom_karbohidrat1':str(recom['Karbohidrat'].values[0]), 'recom_karbohidrat2':str(recom['Karbohidrat'].values[1]), 'recom_karbohidrat3':str(recom['Karbohidrat'].values[2]), 'recom_karbohidrat4':str(recom['Karbohidrat'].values[3]), 'recom_karbohidrat5':str(recom['Karbohidrat'].values[4]),
-        'recom_kalsium1':str(recom['Kalsium'].values[0]), 'recom_kalsium2':str(recom['Kalsium'].values[1]), 'recom_kalsium3':str(recom['Kalsium'].values[2]), 'recom_kalsium4':str(recom['Kalsium'].values[3]), 'recom_kalsium5':str(recom['Kalsium'].values[4]),
-        'recom_besi1':str(recom['Besi'].values[0]), 'recom_besi2':str(recom['Besi'].values[1]), 'recom_besi3':str(recom['Besi'].values[2]), 'recom_besi4':str(recom['Besi'].values[3]), 'recom_besi5':str(recom['Besi'].values[4]),
-        'recom_air1':str(recom['Air'].values[0]), 'recom_air2':str(recom['Air'].values[1]), 'recom_air3':str(recom['Air'].values[2]), 'recom_air4':str(recom['Air'].values[3]), 'recom_air5':str(recom['Air'].values[4]),
-        'recom_takaran1':str(recom['Takaran'].values[0]), 'recom_takaran2':str(recom['Takaran'].values[1]), 'recom_takaran3':str(recom['Takaran'].values[2]), 'recom_takaran4':str(recom['Takaran'].values[3]), 'recom_takaran5':str(recom['Takaran'].values[4]),
-        'recom_kriteria1':str(recom['Kriteria'].values[0]), 'recom_kriteria2':str(recom['Kriteria'].values[1]), 'recom_kriteria3':str(recom['Kriteria'].values[2]), 'recom_kriteria4':str(recom['Kriteria'].values[3]), 'recom_kriteria5':str(recom['Kriteria'].values[4]),
-        'recom_berat1':str(recom['Berat (g)'].values[0]), 'recom_berat2':str(recom['Berat (g)'].values[1]), 'recom_berat3':str(recom['Berat (g)'].values[2]), 'recom_berat4':str(recom['Berat (g)'].values[3]), 'recom_berat5':str(recom['Berat (g)'].values[4])})
+    return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'kalsium':str(kalsium), 'besi':str(besi), 'air':str(air), 'takaran':str(takaran), 'kriteria':str(kriteria), 'berat':str(berat),
+    'recom':recommend(nama, 5, ['Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Kalsium', 'Besi', 'Air', 'Takaran', 'Kriteria', 'Berat (g)']).to_dict(orient='records')})
 
 def recommend(nama, n=5, columns=None):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
