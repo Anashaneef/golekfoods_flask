@@ -68,7 +68,7 @@ def predict():
     kriteria = data['Kriteria'].values[0]
     berat = data['Berat (g)'].values[0]
 
-    return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'kalsium':str(kalsium), 'besi':str(besi), 'air':str(air), 'takaran':str(takaran), 'kriteria':str(kriteria), 'berat':str(berat),
+    return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'kalsium':str(kalsium), 'besi':str(besi), 'air':str(air), 'takaran':takaran, 'kriteria':kriteria, 'berat':str(berat),
     'recom':recommend(nama, 5, ['Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Kalsium', 'Besi', 'Air', 'Takaran', 'Kriteria', 'Berat (g)']).to_dict(orient='records')})
 
 def recommend(nama, n=5, columns=None):
