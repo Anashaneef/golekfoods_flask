@@ -20,19 +20,13 @@ tfidf_energi = gizi['Energi'].to_numpy().reshape(-1, 1)
 tfidf_protein = gizi['Protein'].to_numpy().reshape(-1, 1)
 tfidf_lemak = gizi['Lemak'].to_numpy().reshape(-1, 1)
 tfidf_karbohidrat = gizi['Karbohidrat'].to_numpy().reshape(-1, 1)
-tfidf_kalsium = gizi['Kalsium'].to_numpy().reshape(-1, 1)
-tfidf_besi = gizi['Besi'].to_numpy().reshape(-1, 1)
-tfidf_air = gizi['Air'].to_numpy().reshape(-1, 1)
 
 # Menggabungkan semua vektor
 item_vectors = pd.DataFrame(cosine_similarity(tfidf_nama, tfidf_nama), columns=gizi["Nama Pangan"]).mul(0.1)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_energi, tfidf_energi), columns=gizi["Nama Pangan"]).mul(0.1285714)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_protein, tfidf_protein), columns=gizi["Nama Pangan"]).mul(0.1285714)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_lemak, tfidf_lemak), columns=gizi["Nama Pangan"]).mul(0.1285714)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_karbohidrat, tfidf_karbohidrat), columns=gizi["Nama Pangan"]).mul(0.1285714)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_kalsium, tfidf_kalsium), columns=gizi["Nama Pangan"]).mul(0.1285714)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_besi, tfidf_besi), columns=gizi["Nama Pangan"]).mul(0.1285714)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_air, tfidf_air), columns=gizi["Nama Pangan"]).mul(0.1285714)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_energi, tfidf_energi), columns=gizi["Nama Pangan"]).mul(0.225)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_protein, tfidf_protein), columns=gizi["Nama Pangan"]).mul(0.225)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_lemak, tfidf_lemak), columns=gizi["Nama Pangan"]).mul(0.225)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_karbohidrat, tfidf_karbohidrat), columns=gizi["Nama Pangan"]).mul(0.225)
 
 app = Flask(__name__)
 CORS(app)
@@ -48,10 +42,7 @@ def predict():
     protein = request.json['protein']
     lemak = request.json['lemak']
     karbohidrat = request.json['karbohidrat']
-    kalsium = request.json['kalsium']
-    besi = request.json['besi']
-    air = request.json['air']
-    float_features = [energi, protein, lemak, karbohidrat, kalsium, besi, air]
+    float_features = [energi, protein, lemak, karbohidrat]
     features = [np.array(float_features)]
     prediction = model.predict(features)
 
@@ -61,15 +52,10 @@ def predict():
     protein = data['Protein'].values[0]
     lemak = data['Lemak'].values[0]
     karbohidrat = data['Karbohidrat'].values[0]
-    kalsium = data['Kalsium'].values[0]
-    besi = data['Besi'].values[0]
-    air = data['Air'].values[0]
-    takaran = data['Takaran'].values[0]
-    kriteria = data['Kriteria'].values[0]
-    berat = data['Berat (g)'].values[0]
+    gambar = data['Gambar'].values[0]
 
-    return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'kalsium':str(kalsium), 'besi':str(besi), 'air':str(air), 'takaran':takaran, 'kriteria':kriteria, 'berat':str(berat),
-    'recom':recommend(nama, 5, ['Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Kalsium', 'Besi', 'Air', 'Takaran', 'Kriteria', 'Berat (g)']).to_dict(orient='records')})
+    return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
+    'recom':recommend(nama, 5, ['Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')})
 
 def recommend(nama, n=5, columns=None):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
