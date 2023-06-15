@@ -78,7 +78,7 @@ def advpredict():
     karbohidrat = request.json['karbohidrat']
     float_features = [energi, protein, lemak, karbohidrat]
     features = [np.array(float_features)]
-    prediction = model2.advpredict(features)
+    prediction = model2.predict(features)
 
     data = gizi[gizi['Nama Pangan'] == prediction.item()]
     nama = data['Nama Pangan'].values[0]
