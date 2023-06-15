@@ -70,15 +70,15 @@ def recommend(nama, n=5, columns=None):
     else:
         return gizi[columns].iloc[food_indices].reset_index(drop=True)
 
-@app.route('/predictadv', methods=['POST'])
-def predict():
+@app.route('/advpredict', methods=['POST'])
+def advpredict():
     energi = request.json['energi']
     protein = request.json['protein']
     lemak = request.json['lemak']
     karbohidrat = request.json['karbohidrat']
     float_features = [energi, protein, lemak, karbohidrat]
     features = [np.array(float_features)]
-    prediction = model2.predict(features)
+    prediction = model2.advpredict(features)
 
     data = gizi[gizi['Nama Pangan'] == prediction.item()]
     nama = data['Nama Pangan'].values[0]
@@ -89,9 +89,9 @@ def predict():
     gambar = data['Gambar'].values[0]
 
     return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
-    'recom':recommend(nama, 5, ['Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')})
+    'recom':advrecommend(nama, 5, ['Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')})
 
-def recommend(nama, n=5, columns=None):
+def advrecommend(nama, n=5, columns=None):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
     sim_scores = list(enumerate(item_vectors.iloc[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
