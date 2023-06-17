@@ -92,11 +92,15 @@ def advpredict():
     lemak = data['Lemak'].values[0]
     karbohidrat = data['Karbohidrat'].values[0]
     gambar = data['Gambar'].values[0]
+    dict = {'id':str(id), 'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar}
+    
+    recom_data = advrecommend(nama, 5, ['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')
+    converted_recom = [{key: str(value) for key, value in item.items()} for item in recom_data]
 
-    recom_data = advrecommend(nama)
+    # Join dict and converted_recom
+    dict['recom'] = converted_recom
 
-    return jsonify({'id':str(id),'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
-    'id':recom_data['Id'].to_list(), 'nama':recom_data['Nama Pangan'].to_list(), 'energi':recom_data['Energi'].to_list(), 'protein':recom_data['Protein'].to_list()})
+    return jsonify({converted_recom})
 
 def advrecommend(nama, n=5, columns=['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
