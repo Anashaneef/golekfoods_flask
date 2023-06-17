@@ -97,11 +97,11 @@ def advpredict():
 
     recom_data = [
         {'id':str(id), 'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar},
-        {'id':str(recom['Id'][0]), 'nama':recom['Nama Pangan'][0], 'energi':str(recom['Energi'][0]), 'protein':str(recom['Protein'][0]), 'lemak':str(recom['Lemak'][0]), 'karbohidrat':str(recom['Karbohidrat'][0]), 'gambar':recom['Gambar'][0]},
-        {'id':str(recom['Id'][1]), 'nama':recom['Nama Pangan'][1], 'energi':str(recom['Energi'][1]), 'protein':str(recom['Protein'][1]), 'lemak':str(recom['Lemak'][1]), 'karbohidrat':str(recom['Karbohidrat'][1]), 'gambar':recom['Gambar'][1]},
-        {'id':str(recom['Id'][2]), 'nama':recom['Nama Pangan'][2], 'energi':str(recom['Energi'][2]), 'protein':str(recom['Protein'][2]), 'lemak':str(recom['Lemak'][2]), 'karbohidrat':str(recom['Karbohidrat'][2]), 'gambar':recom['Gambar'][2]},
-        {'id':str(recom['Id'][3]), 'nama':recom['Nama Pangan'][3], 'energi':str(recom['Energi'][3]), 'protein':str(recom['Protein'][3]), 'lemak':str(recom['Lemak'][3]), 'karbohidrat':str(recom['Karbohidrat'][3]), 'gambar':recom['Gambar'][3]},
-        {'id':str(recom['Id'][4]), 'nama':recom['Nama Pangan'][4], 'energi':str(recom['Energi'][4]), 'protein':str(recom['Protein'][4]), 'lemak':str(recom['Lemak'][4]), 'karbohidrat':str(recom['Karbohidrat'][4]), 'gambar':recom['Gambar'][4]}
+        {'id':str(recom['Id'].values[0]), 'nama':recom['Nama Pangan'].values[0], 'energi':str(recom['Energi'].values[0]), 'protein':str(recom['Protein'].values[0]), 'lemak':str(recom['Lemak'].values[0]), 'karbohidrat':str(recom['Karbohidrat'].values[0]), 'gambar':recom['Gambar'].values[0]},
+        {'id':str(recom['Id'].values[1]), 'nama':recom['Nama Pangan'].values[1], 'energi':str(recom['Energi'].values[1]), 'protein':str(recom['Protein'].values[1]), 'lemak':str(recom['Lemak'].values[1]), 'karbohidrat':str(recom['Karbohidrat'].values[1]), 'gambar':recom['Gambar'].values[1]},
+        {'id':str(recom['Id'].values[2]), 'nama':recom['Nama Pangan'].values[2], 'energi':str(recom['Energi'].values[2]), 'protein':str(recom['Protein'].values[2]), 'lemak':str(recom['Lemak'].values[2]), 'karbohidrat':str(recom['Karbohidrat'].values[2]), 'gambar':recom['Gambar'].values[2]},
+        {'id':str(recom['Id'].values[3]), 'nama':recom['Nama Pangan'].values[3], 'energi':str(recom['Energi'].values[3]), 'protein':str(recom['Protein'].values[3]), 'lemak':str(recom['Lemak'].values[3]), 'karbohidrat':str(recom['Karbohidrat'].values[3]), 'gambar':recom['Gambar'].values[3]},
+        {'id':str(recom['Id'].values[4]), 'nama':recom['Nama Pangan'].values[4], 'energi':str(recom['Energi'].values[4]), 'protein':str(recom['Protein'].values[4]), 'lemak':str(recom['Lemak'].values[4]), 'karbohidrat':str(recom['Karbohidrat'].values[4]), 'gambar':recom['Gambar'].values[4]}
     ]
 
     return jsonify({recom_data})
