@@ -67,7 +67,7 @@ def predict():
         {'id':str(recom['Id'].values[4]), 'nama':recom['Nama Pangan'].values[4], 'energi':str(recom['Energi'].values[4]), 'protein':str(recom['Protein'].values[4]), 'lemak':str(recom['Lemak'].values[4]), 'karbohidrat':str(recom['Karbohidrat'].values[4]), 'gambar':recom['Gambar'].values[4], 'id_recom':'6'}
     ]
 
-    return jsonify(recom_data)
+    return jsonify({'data':recom_data})
 
 def recommend(nama, n=5, columns=['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
@@ -110,7 +110,7 @@ def advpredict():
         {'id':str(recom['Id'].values[4]), 'nama':recom['Nama Pangan'].values[4], 'energi':str(recom['Energi'].values[4]), 'protein':str(recom['Protein'].values[4]), 'lemak':str(recom['Lemak'].values[4]), 'karbohidrat':str(recom['Karbohidrat'].values[4]), 'gambar':recom['Gambar'].values[4], 'id_recom':'6'}
     ]
 
-    return jsonify(recom_data)
+    return jsonify({'data':recom_data})
 
 def advrecommend(nama, n=5, columns=['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
