@@ -92,13 +92,13 @@ def advpredict():
     lemak = data['Lemak'].values[0]
     karbohidrat = data['Karbohidrat'].values[0]
     gambar = data['Gambar'].values[0]
-    dict = {'id':str(id), 'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar}
+    recom_dict = {'id':str(id), 'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar}
     
     recom_data = advrecommend(nama, 5, ['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')
     converted_recom_dict = [{key: str(value) for key, value in item.items()} for item in recom_data]
 
-    # Join dict and converted_recom_dict
-    converted_recom = {**dict, **converted_recom_dict}
+    # Join recom_dict and converted_recom_dict
+    converted_recom = {**recom_dict, **converted_recom_dict[0]}
 
     return jsonify({converted_recom})
 
