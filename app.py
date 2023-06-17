@@ -95,10 +95,10 @@ def advpredict():
     dict = {'id':str(id), 'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar}
     
     recom_data = advrecommend(nama, 5, ['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')
-    converted_recom = [{key: str(value) for key, value in item.items()} for item in recom_data]
+    converted_recom_dict = [{key: str(value) for key, value in item.items()} for item in recom_data]
 
-    # Join dict and converted_recom
-    dict['recom'] = converted_recom
+    # Join dict and converted_recom_dict
+    converted_recom = {**dict, **converted_recom_dict}
 
     return jsonify({converted_recom})
 
