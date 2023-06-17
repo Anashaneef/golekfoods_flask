@@ -96,7 +96,7 @@ def advpredict():
     recom_data = advrecommend(nama)
 
     return jsonify({'id':str(id),'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
-    'id':str(recom_data['Id']).to_list(), 'nama':str(recom_data['Nama Pangan']).to_list(), 'energi':str(recom_data['Energi']).to_list(), 'protein':str(recom_data['Protein']).to_list()})
+    'id':recom_data['Id'].to_list(), 'nama':recom_data['Nama Pangan'].to_list(), 'energi':recom_data['Energi'].to_list(), 'protein':recom_data['Protein'].to_list()})
 
 def advrecommend(nama, n=5, columns=['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
