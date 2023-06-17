@@ -91,7 +91,7 @@ def advpredict():
     gambar = data['Gambar'].values[0]
 
     return jsonify({'id':str(id),'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
-    'recom':advrecommend(nama, 5, [str('Id'), 'Nama Pangan', str('Energi'), str('Protein'), str('Lemak'), str('Karbohidrat'), 'Gambar']).to_dict(orient='records')})
+    'recom':advrecommend(nama, 5, ['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')})
 
 def advrecommend(nama, n=5, columns=None):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
@@ -100,9 +100,9 @@ def advrecommend(nama, n=5, columns=None):
     sim_scores = sim_scores[1:n+1]
     food_indices = [i[0] for i in sim_scores]
     if columns is None:
-        return gizi.iloc[food_indices].reset_index(drop=True)
+        return str(gizi.iloc[food_indices].reset_index(drop=True))
     else:
-        return gizi[columns].iloc[food_indices].reset_index(drop=True)
+        return str(gizi[columns].iloc[food_indices].reset_index(drop=True))
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
