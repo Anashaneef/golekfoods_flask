@@ -49,6 +49,7 @@ def predict():
     prediction = model.predict(features)
 
     data = gizi[gizi['Nama Pangan'] == prediction.item()]
+    id = data['Id'].values[0]
     nama = data['Nama Pangan'].values[0]
     energi = data['Energi'].values[0]
     protein = data['Protein'].values[0]
@@ -56,8 +57,8 @@ def predict():
     karbohidrat = data['Karbohidrat'].values[0]
     gambar = data['Gambar'].values[0]
 
-    return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
-    'recom':recommend(nama, 5, ['Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')})
+    return jsonify({'id':str(id), 'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
+    'recom':recommend(nama, 5, ['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')})
 
 def recommend(nama, n=5, columns=None):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
@@ -81,6 +82,7 @@ def advpredict():
     prediction = model2.predict(features)
 
     data = gizi[gizi['Nama Pangan'] == prediction.item()]
+    id = data['Id'].values[0]
     nama = data['Nama Pangan'].values[0]
     energi = data['Energi'].values[0]
     protein = data['Protein'].values[0]
@@ -88,8 +90,8 @@ def advpredict():
     karbohidrat = data['Karbohidrat'].values[0]
     gambar = data['Gambar'].values[0]
 
-    return jsonify({'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
-    'recom':advrecommend(nama, 5, ['Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')})
+    return jsonify({'id':str(id),'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
+    'recom':advrecommend(nama, 5, ['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')})
 
 def advrecommend(nama, n=5, columns=None):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
