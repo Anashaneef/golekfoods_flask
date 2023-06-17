@@ -93,13 +93,12 @@ def advpredict():
     karbohidrat = data['Karbohidrat'].values[0]
     gambar = data['Gambar'].values[0]
 
-    recom_data = advrecommend(nama, 5, ['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']).to_dict(orient='records')
-    converted_recom = [{key: str(value) for key, value in item.items()} for item in recom_data]
+    recom_data = advrecommend(nama)
 
     return jsonify({'id':str(id),'nama':nama, 'energi':str(energi), 'protein':str(protein), 'lemak':str(lemak), 'karbohidrat':str(karbohidrat), 'gambar':gambar,
-    'recom': converted_recom})
+    'id':str(recom_data['Id']).to_list(), 'nama':str(recom_data['Nama Pangan']).to_list(), 'energi':str(recom_data['Energi']).to_list(), 'protein':str(recom_data['Protein']).to_list()})
 
-def advrecommend(nama, n=5, columns=None):
+def advrecommend(nama, n=5, columns=['Id', 'Nama Pangan', 'Energi', 'Protein', 'Lemak', 'Karbohidrat', 'Gambar']):
     idx = gizi[gizi["Nama Pangan"] == nama].index[0]
     sim_scores = list(enumerate(item_vectors.iloc[idx]))
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
