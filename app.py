@@ -24,11 +24,10 @@ tfidf_lemak = gizi['Lemak'].to_numpy().reshape(-1, 1)
 tfidf_karbohidrat = gizi['Karbohidrat'].to_numpy().reshape(-1, 1)
 
 # Menggabungkan semua vektor
-item_vectors = pd.DataFrame(cosine_similarity(tfidf_nama, tfidf_nama), columns=gizi["Nama Pangan"]).mul(0.1)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_energi, tfidf_energi), columns=gizi["Nama Pangan"]).mul(0.225)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_protein, tfidf_protein), columns=gizi["Nama Pangan"]).mul(0.225)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_lemak, tfidf_lemak), columns=gizi["Nama Pangan"]).mul(0.225)
-item_vectors += pd.DataFrame(cosine_similarity(tfidf_karbohidrat, tfidf_karbohidrat), columns=gizi["Nama Pangan"]).mul(0.225)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_energi, tfidf_energi), columns=gizi["Nama Pangan"]).mul(0.25)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_protein, tfidf_protein), columns=gizi["Nama Pangan"]).mul(0.25)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_lemak, tfidf_lemak), columns=gizi["Nama Pangan"]).mul(0.25)
+item_vectors += pd.DataFrame(cosine_similarity(tfidf_karbohidrat, tfidf_karbohidrat), columns=gizi["Nama Pangan"]).mul(0.25)
 
 app = Flask(__name__)
 CORS(app)
